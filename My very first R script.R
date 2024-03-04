@@ -164,4 +164,107 @@ qplot(x, y)
 
 qplot(y)
 
+# Function -----
+library(ggplot2)
+
+roll_fair <- function(){
+  dice <- sample(1:6, 2, TRUE)
+  #results <- paste0("Roll: ", dice[1], " and ", dice[2], " gives ", sum(dice))
+  results <- sum(dice)
+  return(results)
+}
+
+roll_loaded <- function(){
+  dice <- sample(1:6, 2, TRUE, prob=c(1,1,1,1,10,10))
+  #results <- paste0("Roll: ", dice[1], " and ", dice[2], " gives ", sum(dice))
+  results <- sum(dice)
+  return(results)
+}
+
+fair_sum <- replicate(1000, roll_fair())
+loaded_sum <- replicate(1000, roll_loaded())
+
+hist(fair_sum, 10)
+hist(loaded_sum, 10)
+
+fig1 <- ggplot2::qplot(fair_sum)
+fig2 <- ggplot2::qplot(loaded_sum)
+
+fig1
+
+install.packages("cowplot")
+library(cowplot)
+
+cowplot::plot_grid(fig1, fig2, nrow = 1)
+
+roll_many <- function(n){
+  dice1 <- sample(1:6, n, TRUE)
+  dice2 <- sample(1:6, n, TRUE)
+  return(dice1 + dice2)
+}
+
+roll_many(2)
+
+ggplot2::qplot(roll_many(1e4))
+
+
+library(magrittr)
+
+# manual
+x <- 3
+y <- exp(x)
+z <- sqrt(y)
+t <- log10(z)
+s <- abs(t)
+
+# Or in one line
+s <- abs(log10(sqrt(exp(3))))
+
+# Or pipe
+x %>%
+  exp() %>%
+  sqrt() %>%
+  log10() %>%
+  abs()
+
+x <- 3
+x %>%
+  substraction(1)
+
+# R OBJECTS -----
+
+# atomic vectors
+die
+
+is.vector(die)
+length(die) # will use very common
+
+five <-5
+is.vector(five)
+length(five)
+
+typeof(die)
+typeof(five)
+
+sqrt(2)^2 -2 
+
+
+logicals <- c(TRUE, FALSE, T, F, F, F)
+
+logicals
+typeof(logicals)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
