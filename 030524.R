@@ -36,3 +36,245 @@ die
 rownames(die) <- c('r1', 'r2')
 colnames(die) <- c('c1', 'c2', 'c3')
 die 
+
+attributes(die)
+
+colnames(die) <- NULL
+die
+
+rownames(die) <- NULL
+die
+
+class(die)
+
+die<-1:6
+class(die)
+
+# we use lists to group arbitrary objects
+list1 <- list(1:100, 3, 'five', mean, matrix(1:12, 3) )
+names(list1) <- c('vector', 'numeric', 'character', 'function', 'matrix')
+list1
+
+list2 <- list('vector' = 1:10,
+              'numeric' = 3,
+              'character' = 'five',
+              'func' = mean,
+              'matrix' = matrix(1:12, 3))
+
+list2
+
+# a data frame is a list of vectors of the same length
+df <- data.frame(face = c('ace', 'two', 'six'),
+                 suit = c('clubs', 'clubs', 'clubs'),
+                 value = c(1,2,3))
+
+df
+
+# if any of the entries is a constant, it will be recycled
+data.frame(face = c('ace', 'two', 'six'),
+           suit = c('clubs', 'clubs', 'clubs'),
+           value = 1)
+typeof(df)
+class(df)
+str(df)
+
+faces <- c('king', 'queen', 'jack', 'ten', 'nine',
+           'eight', 'seven', 'six', 'five', 'four',
+           'three', 'two', 'one')
+suits = c('spades', 'clubs', 'hearts', 'diamonds')
+values <- seq()
+
+rep(c('a', 'b', 'c'), 2)
+
+deck <- data.frame(suit = rep(suits, each = 13),
+                   face = rep(faces, 4),
+                   value = rep(values, times = 4))
+
+
+deck
+
+# how to save and load data
+write.csv(x=deck, file = 'Data/deck.csv')
+
+deck.read <- read.csv('Data/deck.csv')
+deck.read
+
+head(deck, n=10)
+tail(deck)
+summary(deck)
+glimpse(deck)
+str(deck)
+
+## Rdata save
+list1
+saveRDS(list1, file='Data/list.RDS')
+list1.read <- readRDS('Data/list.RDS')
+list1.read
+
+deck.read <- data.table::fread('Data/deck.csv')
+
+
+
+random_matrix <- matrix(rnorm(3000), 50)
+dim(random_matrix)
+
+library(useful)
+corner(random_matrix) ## 5 x 5 upper left
+
+write.csv(random_matrix, 
+          'Data/random_matrix.csv')
+
+random_matrix.read <- read.csv('Data/random_matrix.csv')
+
+random_matrix.read %>% corner
+
+
+random_matrix.read <- data.table::fread('Data/random_matrix.csv')
+random_matrix.read %>% as.matrix()
+
+
+# Dicing and selecting datasets -----
+
+dim(deck)
+head(deck)
+nrow(deck)
+
+deck[1,1]
+deck[1,1,3]
+deck[1:5, 2:3]
+
+deck[,0]
+
+deck[1:5, -3]
+deck[1:4, c(-1,3)] # doesn't work
+
+deck[1:4, c('suit', 'value')]
+
+names(die) <- c('one', 'two', 'three', 'four', 'five', 'six')
+die
+die['three']
+
+deck[1:4, c(TRUE, FALSE, TRUE)]
+
+deck[1:5, 2, drop=FALSE]
+
+deck$suit
+deck$face
+deck[deck$suit == "spades", ]
+
+list1$vector
+list1$character
+
+list1[1]
+list1[1:2]
+list1[-1]
+
+list1[1] %>% class()
+
+deck$value %>% median()
+
+deck$suit %>% unique()
+
+suit.table <- deck$suit %>% table()
+
+suit.table['clubs']
+
+sum(deck$suit == 'clubs')
+
+mean(deck$suit == 'clubs')
+
+deck2 <- deck
+
+# Modifying values -----
+
+# a fresy copy of the deck
+deck2 <- deck
+
+vec <- rep(0,6)
+vec
+
+vec[1]
+vec[1] <- 1000
+
+vec[c(1,3,5)] <- c(1,2,1)
+vec
+
+vec[4:6] <- vec[4:6] +1
+vec
+
+vec[1:3] <- vec[1:3] + vec[4:6]
+vec
+
+vec[7] <- 0
+vec
+vec[7] <- NA
+vec
+vec <- vec[-7] ## remove
+vec
+
+
+deck2 %>% head()
+
+deck2$new <- 1:52
+
+deck2$new <- NULL
+
+deck2 %>% head()
+
+# let's bump the values of aces to 14
+deck2$value[deck2$face == 'one'] <- c(14)
+deck2[deck2$face == 'one', 3] <- 14 
+
+sample(10)
+
+sample(1:6, replace=TRUE)
+
+# shuffling the deck
+deck3 <- deck[sample(52), ]
+deck3
+
+deck$face == 'one'
+
+deck3[deck3$face == 'one', 3] <- 14
+
+deck3$face[deck3$face == 'one'] <- 'ace'
+deck3
+
+# some simple examples with booleans
+1 > 2
+2>1
+1 > c(0,1,2)
+c(1,2) > c(0,1,2)
+all(c(1,2,3) == c(3,2,1))
+
+1 %in% c(3,4,5)
+c(1,2) %in% c(3,4,5) #no recycling!
+c(1,2,3) %in% c(3,4,5)
+c(1,2,3,4) %in% c(3,4,5)
+
+any(1 == c(3,4,5)) # equal to 1 %in% c(3,4,5)
+
+deck4 <- deck3[sample(52), ] ## shuffle
+
+deck4$value[deck4$suit != 'hearts'] <- 0
+deck4
+
+deck4$value[deck4$face == 'queen' & deck4$suit == 'spades'] <- 13
+
+# NA's are contiguous
+1 + NA
+NA == 1
+c(NA, 1:50)
+mean(c(NA, 1:50))
+
+deck4$value[1] <- NA
+deck4
+
+x <- c(NA,1:50)
+x[!is.na(x)]
+
+x <- c(NA, 1:50, 1/0)
+x
+is.finite(x)
+
+
