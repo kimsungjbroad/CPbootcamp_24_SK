@@ -277,4 +277,138 @@ x <- c(NA, 1:50, 1/0)
 x
 is.finite(x)
 
+deal <- function(deck, n){
+    shuffle <- deck[sample(nrow(deck), n, replace=TRUE), ]
+    return(shuffle)
+}
+
+deal <- function(deck, n){
+  n.deck <- nrow(deck)
+  shuffled_deck <- deck[sample(n.deck), ]
+  hand <- head(shuffled_deck, n)
+  rest <- head(shuffled_deck, n.deck-n)
+  return(list(hand = hand, rest = rest))
+}
+
+
+# Taiga -----
+install.packages('devtools')
+library(devtools)
+devtools::install_github("https://github.com/broadinstitute/taigr")
+
+dir.create(path.expand("~/.taiga"))
+write("d9899913-c88e-4c6f-962e-ebd0a2071ffe", file=path.expand("~/.taiga/token"))
+options(taigaclient.path=path.expand("~/miniconda3/envs/taigapy/bin/taigaclient"))
+library(taigr)
+tmp <- taigr::load.from.taiga("taigr-data-40f2.7/tiny_matrix")
+tmp
+
+
+# Conditionals -----
+
+num <- -2
+if(num < 0){
+  num <- num * -1
+}
+num
+
+absolute_value <- function(num){
+  if(num<0){
+    num <- num * -1
+  }
+  return(num)
+}
+
+absolute_value(-2)
+
+x <- 1
+if(3 == 3){
+  x <- 2
+}
+x
+
+
+x <- 1
+if(x==1){
+  x <- 2
+  if(x==1){
+    x <-3
+  }
+}
+x
+
+
+a <- 3.14
+dec <- a - trunc(0) # truncated part of integer a
+dec
+
+if(dec >= 0.5){
+  a <- trunc(a) + 1
+} else
+  {a <- trunc(a)
+}
+a
+
+a <- 20
+b <- 20
+
+if(a>b){
+  print("A wins")
+
+}
+
+# write a function that takes one integer as input and 
+# print 'Fizz' if it is a multiple of 3, 
+# prints 'Buzz' if it is a multiple of 5 ,
+# and 'FizzBuzz' if it is a multiple of 15
+# if input is none of those, print the input itself
+
+f <- function(input){
+  if(input%%3 == 0){
+    if(input%%15 == 0){
+      print('FizzBuzz')
+    } else {
+    print('Fizz')
+    }
+  } else if(input%%5 == 0){
+    if(input%%15 == 0){
+      print('FizzBuzz')
+    } else {
+    print('Buzz')
+    }
+  } else {
+    print(input)
+  }
+}
+
+f(45)
+
+# sometimes it is easier to use look-up table
+
+print_die <- function(x){
+  die = c('one', 'two', 'three', 'four', 'five', 'six')
+  if(x %in% 1:6){
+    print(die[x])
+  }else{
+    print("Input is not between 1 and 6!")
+  }
+}
+
+print_die(10)
+
+
+# create some cell line data
+cell_line_data <- data.frame(cell_line = paste0('c', 1:100), # cell line 
+                             growth_rate = runif(100, 0.5, 5), # doubling 
+                             log_period = rexp(100, 1), # in days
+                             initial_cell_count = sample(c(25, 50, 100), 100, replace = TRUE, prob = c(0.25, 0.5, 0.25))
+)
+
+cell_line_data$log_period %>%
+  sort() %>%
+  plot(type = "s")
+
+
+
+
 
