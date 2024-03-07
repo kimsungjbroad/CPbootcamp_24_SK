@@ -424,3 +424,12 @@ ggplot(mpg) +
   facet_wrap(. ~class, nrow = 2)
 
 
+
+# Geometric Objects -----
+
+
+
+
+
+
+
